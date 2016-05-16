@@ -65,7 +65,7 @@ try {
 		throw $errMsg
 	}
 	else {
-	    logInfo "Found file: $mediaDir\$DDF_INST"
+	    logInfo "Found directory: $mediaDir"
 	}
 	
 	# Create the install directory
@@ -83,7 +83,7 @@ try {
 
 	# Copy the install media to the install directory
 	logInfo "Copying files in $mediaDir to $installDir..."
-	Copy-Item $mediaDir\* $DDF_ROOT -force
+	Copy-Item $mediaDir\* $installDir -force
 	
 	if ($? -eq $false) {
 	    $errMsg="Unable to copy files from $mediaDir to $installDir"
