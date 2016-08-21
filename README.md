@@ -13,3 +13,19 @@ Use this asset with no modifications to copy media files from your asset to C:\i
 * Update the doc/HELP.html as appropriate
 * Create a zip file of this directory
 * [Import this asset into CONS3RT](https://kb.cons3rt.com/kb/assets/importing-your-asset-zip-file)
+
+---
+
+# Copy Media Files to Windows
+
+This is a sample asset that copies media files to a Windows machine.
+
+## Prerequisites
+
+*   Windows OS with Powershell
+
+## Exit Codes
+
+*   0 = Success
+*   Non-Zero = Media file copy failed
+
