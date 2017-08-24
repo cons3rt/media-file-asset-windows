@@ -83,7 +83,7 @@ try {
 
 	# Copy the install media to the install directory
 	logInfo "Copying files in $mediaDir to $installDir..."
-	Copy-Item $mediaDir\* $installDir -force
+	Copy-Item $mediaDir\* $installDir -force -recurse
 	
 	if ($? -eq $false) {
 	    $errMsg="Unable to copy files from $mediaDir to $installDir"
