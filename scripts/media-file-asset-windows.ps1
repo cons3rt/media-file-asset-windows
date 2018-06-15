@@ -14,10 +14,13 @@ $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 # Media file staging directory
 $installDir = "C:\install_media"
 
+# exit code
+$exitCode = 0
+
 # Local variables for the log file
-$TIMESTAMP=Get-Date -f yyyy-MM-dd-HHmm
-$LOGTAG="media-file-asset-windows"
-$LOGFILE="C:\log\cons3rt-install-$LOGTAG-$TIMESTAMP.log"
+$TIMESTAMP = Get-Date -f yyyy-MM-dd-HHmmss
+$LOGTAG = "media-file-asset-windows"
+$LOGFILE = "C:\cons3rt\log\$LOGTAG-$TIMESTAMP.log"
 
 ######################### END VARIABLES #############################
 
@@ -25,21 +28,20 @@ $LOGFILE="C:\log\cons3rt-install-$LOGTAG-$TIMESTAMP.log"
 
 # Set up logging functions
 function logger($level, $logstring) {
-   $stamp=get-date -f yyyyMMdd-HHmmss
-   $logmsg="$stamp - $LOGTAG - [$level] - $logstring"
-   add-content $LOGFILE -value $logmsg
-   #write-host $logmsg
-}
-function logErr($logstring) { logger "ERROR" $logstring }
-function logWarn($logstring) { logger "WARNING" $logstring }
-function logInfo($logstring) { logger "INFO" $logstring }
+	$stamp = get-date -f yyyyMMdd-HH:mm:ss
+	$logmsg = "$stamp - $LOGTAG - [$level] - $logstring"
+	write-output $logmsg
+ }
+ function logErr($logstring) { logger "ERROR" $logstring }
+ function logWarn($logstring) { logger "WARNING" $logstring }
+ function logInfo($logstring) { logger "INFO" $logstring }
 
 ###################### END HELPER FUNCTIONS ##########################
 
 ######################## SCRIPT EXECUTION ############################
 
-new-item $LOGFILE -itemType file -force
-
+new-item $logfile -itemType file -force
+start-transcript -append -path $logfile
 logInfo "Running $LOGTAG..."
 
 try {  
@@ -107,15 +109,22 @@ try {
     }
 }
 catch {
-    logErr "Caught exception: $_"
-    exit 1
+    logErr "Caught exception after $($stopwatch.Elapsed): $_"
+    $exitCode = 1
+    $kill = (gwmi win32_process -Filter processid=$pid).parentprocessid
+    if ( (Get-Process -Id $kill).ProcessName -eq "cmd" ) {
+        logErr "Exiting using taskkill..."
+        Stop-Transcript
+        TASKKILL /PID $kill /T /F
+    }
 }
 finally {
-    logInfo "Media file install complete!"
-    logInfo "Time to complete: $($stopwatch.Elapsed)"
-    exit 0
+    logInfo "$LOGTAG complete in $($stopwatch.Elapsed)"
 }
 
 ###################### END SCRIPT EXECUTION ##########################
 
-exit 0
+logInfo "Exiting with code: $exitCode"
+stop-transcript
+get-content -Path $logfile
+exit $exitCode
