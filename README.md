@@ -10,7 +10,7 @@ Use this asset with no modifications to copy media files from your asset to C:\i
 * Add your media files to the media directory
 * Update the asset.properties file
 * Update the LICENSE.md with links to appropriate license info
-* Update the HELP.md as appropriate
+* Update the README.md as appropriate
 * Create a zip file of this directory
 * [Import this asset into CONS3RT](https://kb.cons3rt.com/kb/assets/importing-your-asset-zip-file)
 
