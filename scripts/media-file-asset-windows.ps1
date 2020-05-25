@@ -1,12 +1,11 @@
-# media-file-asset-windows.ps1
-# Created by: Joe Yennaco 5/16/2016
-
-# Use this script with no modifications to copy media files from
-# your asset to C:\install_media.  Otherwise, update the "installDir"
-# variable below.
+#!/usr/bin/env pwsh
+<#
+Use this script with no modifications to copy media files from
+your asset media directory to C:\install_media.  Otherwise, update
+the "installDir" variable below.
+#>
 
 $ErrorActionPreference = "Stop"
-#$scriptPath = Split-Path -LiteralPath $(if ($PSVersionTable.PSVersion.Major -ge 3) { $PSCommandPath } else { & { $MyInvocation.ScriptName } })
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 ########################### VARIABLES ###############################
@@ -17,24 +16,23 @@ $installDir = "C:\install_media"
 # exit code
 $exitCode = 0
 
-# Local variables for the log file
-$TIMESTAMP = Get-Date -f yyyy-MM-dd-HHmmss
-$LOGTAG = "media-file-asset-windows"
-$LOGFILE = "C:\cons3rt\log\$LOGTAG-$TIMESTAMP.log"
+# Configure the log file
+$logTag = 'media-file-asset-windows.ps1'
+$logFileTimestamp = Get-Date -f "yyyyMMdd-HHmmss"
+$logFile = "C:\cons3rt-agent\log\$logTag-$logFileTimestamp.log"
 
 ######################### END VARIABLES #############################
 
 ######################## HELPER FUNCTIONS ############################
 
-# Set up logging functions
+# Logging methods
 function logger($level, $logstring) {
-	$stamp = get-date -f yyyyMMdd-HH:mm:ss
-	$logmsg = "$stamp - $LOGTAG - [$level] - $logstring"
-	write-output $logmsg
- }
- function logErr($logstring) { logger "ERROR" $logstring }
- function logWarn($logstring) { logger "WARNING" $logstring }
- function logInfo($logstring) { logger "INFO" $logstring }
+	$stamp = get-date -f "yyyyMMdd HH:mm:ss"
+	"$stamp $logTag [$level]: $logstring"
+}
+function logErr($logstring) { logger "ERROR" $logstring }
+function logWarn($logstring) { logger "WARNING" $logstring }
+function logInfo($logstring) { logger "INFO" $logstring }
 
 ###################### END HELPER FUNCTIONS ##########################
 
@@ -45,7 +43,7 @@ start-transcript -append -path $logfile
 logInfo "Running $LOGTAG..."
 
 try {  
-    logInfo "Running $LOGTAG at $TIMESTAMP..."
+    logInfo "Starting: $LOGTAG"
 	logInfo "Install Directory: $installDir"
     
 	# Exit if ASSET_DIR is not set
