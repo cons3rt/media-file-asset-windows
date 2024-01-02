@@ -12,7 +12,7 @@ Use this asset with no modifications to copy media files from your asset to C:\i
 * Update the LICENSE.md with links to appropriate license info
 * Update the README.md as appropriate
 * Create a zip file of this directory
-* [Import this asset into CONS3RT](https://kb.cons3rt.com/kb/assets/importing-your-asset-zip-file)
+* [Import the asset zip file](https://arcus.mil/kb/importing-your-asset-zip-file/)
 
 ---
 
